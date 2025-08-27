@@ -27,7 +27,8 @@ router.register(r'profiles', ProfileViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-     path('api/', include(router.urls)),
+    path('api/', include(router.urls)),
+    path('', include('frontend.urls')),
 ]
 
 if settings.DEBUG:
