@@ -2,4 +2,4 @@ from django.shortcuts import render
 
 # Create your views here.
 def home(request):
-    return render(request, 'frontend/static/home.html')
+    return render(request, 'home.html')
