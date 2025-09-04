@@ -21,6 +21,7 @@ from rest_framework import routers
 from cv_api.views import ProfileViewSet
 from django.conf import settings
 from django.conf.urls.static import static
+from cv_api import views as cv_views 
 
 router = routers.DefaultRouter()
 router.register(r'profiles', ProfileViewSet)
@@ -29,6 +30,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('', include('frontend.urls')),
+    path('dashboard/profiles/', cv_views.profile_list, name='profile_list'),
+    path('dashboard/profiles/create/', cv_views.profile_create, name='profile_create'),
+    path('dashboard/profiles/<int:pk>/edit/', cv_views.profile_edit, name='profile_edit'),
+    path('dashboard/profiles/<int:pk>/delete/', cv_views.profile_delete, name='profile_delete'),
 ]
 
 if settings.DEBUG:

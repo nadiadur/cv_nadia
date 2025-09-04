@@ -1,0 +1,36 @@
+{% extends "frontend/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Profiles</h2>
+    <a href="{% url 'profile_create' %}" class="btn btn-success mb-3">+ Tambah Profile</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Alamat</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Github</th>
+                <th>Summary</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in profiles %}
+            <tr>
+                <td>{{ p.name }}</td>
+                <td>{{ p.address }}</td>
+                <td>{{ p.phone }}</td>
+                <td>{{ p.email }}</td>
+                <td>{{ p.github }}</td>
+                <td>{{ p.summary|truncatewords:10 }}</td>
+                <td>
+                    <a href="{% url 'profile_edit' p.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'profile_delete' p.pk %}" class="btn btn-danger btn-sm">Hapus</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
