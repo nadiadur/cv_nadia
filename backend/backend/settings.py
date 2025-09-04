@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-&j1kq_qbfg*qyko)a405g5&@7lv(s5i4#)lxfd#x5-xzh13y2q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.21.64', 'cvnadia.local']
 
 
 # Application definition
