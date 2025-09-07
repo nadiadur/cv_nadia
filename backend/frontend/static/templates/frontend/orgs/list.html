@@ -1,0 +1,38 @@
+{% extends "frontend/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Organization Experience</h2>
+    <a href="{% url 'org_create' %}" class="btn btn-success mb-3">+ Tambah Organisasi</a>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Profile</th>
+                <th>Role</th>
+                <th>Organization</th>
+                <th>Period</th>
+                <th>Description</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for org in orgs %}
+            <tr>
+                <td>{{ org.profile.name }}</td>
+                <td>{{ org.role }}</td>
+                <td>{{ org.organization }}</td>
+                <td>{{ org.period }}</td>
+                <td>{{ org.description|truncatewords:10 }}</td>
+                <td>
+                    <a href="{% url 'org_edit' org.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'org_delete' org.pk %}" class="btn btn-danger btn-sm">Hapus</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">Tidak ada data organisasi</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

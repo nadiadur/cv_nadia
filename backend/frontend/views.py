@@ -1,11 +1,11 @@
 import requests
 from django.shortcuts import render, get_object_or_404, redirect
-from cv_api.models import Project, Profile, Skill
+from cv_api.models import Project, Profile, Skill, OrganizationExperience
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import logout
-from cv_api.forms import ProfileForm, SkillForm
+from cv_api.forms import ProfileForm, SkillForm, OrganizationExperienceForm
 
 
 
@@ -138,3 +138,36 @@ def skill_delete(request, pk):
         skill.delete()
         return redirect('skill_list')
     return render(request, 'frontend/skills/delete.html', {'skill': skill})
+
+def org_list(request):
+    orgs = OrganizationExperience.objects.all()
+    return render(request, 'frontend/orgs/list.html', {'orgs': orgs})
+
+def org_create(request):
+    if request.method == 'POST':
+        form = OrganizationExperienceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('org_list')
+    else:
+        form = OrganizationExperienceForm()
+    return render(request, 'frontend/orgs/form.html', {'form': form})
+
+def org_edit(request, pk):
+    org = get_object_or_404(OrganizationExperience, pk=pk)
+    if request.method == 'POST':
+        form = OrganizationExperienceForm(request.POST, instance=org)
+        if form.is_valid():
+            form.save()
+            return redirect('org_list')
+    else:
+        form = OrganizationExperienceForm(instance=org)
+    return render(request, 'frontend/orgs/form.html', {'form': form})
+
+def org_delete(request, pk):
+    org = get_object_or_404(OrganizationExperience, pk=pk)
+    if request.method == 'POST':
+        org.delete()
+        return redirect('org_list')
+    return render(request, 'frontend/orgs/delete.html', {'org': org})
+

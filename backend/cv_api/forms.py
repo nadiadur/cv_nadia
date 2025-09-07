@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Skill
+from .models import Profile, Skill, OrganizationExperience
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -22,4 +22,16 @@ class SkillForm(forms.ModelForm):
             'profile': forms.Select(attrs={'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'category': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class OrganizationExperienceForm(forms.ModelForm):
+    class Meta:
+        model = OrganizationExperience
+        fields = ['profile', 'role', 'organization', 'period', 'description']
+        widgets = {
+            'profile': forms.Select(attrs={'class': 'form-control'}),
+            'role': forms.TextInput(attrs={'class': 'form-control'}),
+            'organization': forms.TextInput(attrs={'class': 'form-control'}),
+            'period': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
         }
