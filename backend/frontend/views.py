@@ -1,11 +1,12 @@
 import requests
 from django.shortcuts import render, get_object_or_404, redirect
-from cv_api.models import Project, Profile
+from cv_api.models import Project, Profile, Skill
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import logout
-from cv_api.forms import ProfileForm
+from cv_api.forms import ProfileForm, SkillForm
+
 
 
 def home(request):
@@ -105,3 +106,35 @@ def profile_delete(request, pk):
         profile.delete()
         return redirect('profile-list')
     return render(request, "frontend/profiles/delete.html", {"profile": profile})
+
+def skill_list(request):
+    skills = Skill.objects.all()
+    return render(request, 'frontend/skills/list.html', {'skills': skills})
+
+def skill_create(request):
+    if request.method == 'POST':
+        form = SkillForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('skill_list')
+    else:
+        form = SkillForm()
+    return render(request, 'frontend/skills/form.html', {'form': form})
+
+def skill_edit(request, pk):
+    skill = get_object_or_404(Skill, pk=pk)
+    if request.method == 'POST':
+        form = SkillForm(request.POST, instance=skill)
+        if form.is_valid():
+            form.save()
+            return redirect('skill_list')
+    else:
+        form = SkillForm(instance=skill)
+    return render(request, 'frontend/skills/form.html', {'form': form})
+
+def skill_delete(request, pk):
+    skill = get_object_or_404(Skill, pk=pk)
+    if request.method == 'POST':
+        skill.delete()
+        return redirect('skill_list')
+    return render(request, 'frontend/skills/delete.html', {'skill': skill})

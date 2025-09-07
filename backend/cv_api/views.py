@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework import viewsets
-from .models import Profile
-from .forms import ProfileForm
+from .models import Profile, Skill
+from .forms import ProfileForm, SkillForm
 from .serializers import ProfileSerializer
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -43,3 +43,37 @@ def profile_delete(request, pk):
         profile.delete()
         return redirect('profile_list')
     return render(request, 'frontend/profiles/delete.html', {'profile': profile})
+
+# --- Skill CRUD ---
+
+def skill_list(request):
+    skills = Skill.objects.all()
+    return render(request, 'frontend/skills/list.html', {'skills': skills})
+
+def skill_create(request):
+    if request.method == 'POST':
+        form = SkillForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('skill_list')
+    else:
+        form = SkillForm()
+    return render(request, 'frontend/skills/form.html', {'form': form})
+
+def skill_edit(request, pk):
+    skill = get_object_or_404(Skill, pk=pk)
+    if request.method == 'POST':
+        form = SkillForm(request.POST, instance=skill)
+        if form.is_valid():
+            form.save()
+            return redirect('skill_list')
+    else:
+        form = SkillForm(instance=skill)
+    return render(request, 'frontend/skills/form.html', {'form': form})
+
+def skill_delete(request, pk):
+    skill = get_object_or_404(Skill, pk=pk)
+    if request.method == 'POST':
+        skill.delete()
+        return redirect('skill_list')
+    return render(request, 'frontend/skills/delete.html', {'skill': skill})
