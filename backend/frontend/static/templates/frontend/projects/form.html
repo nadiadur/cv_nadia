@@ -1,0 +1,80 @@
+{% extends "frontend/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    {% if form.instance.pk %}
+        <h2>Edit Project</h2>
+    {% else %}
+        <h2>Tambah Project</h2>
+    {% endif %}
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.profile.label_tag }} 
+            {{ form.profile }}
+            {% if form.profile.errors %}
+                <div class="text-danger">{{ form.profile.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.title.label_tag }} 
+            {{ form.title }}
+            {% if form.title.errors %}
+                <div class="text-danger">{{ form.title.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.description.label_tag }} 
+            {{ form.description }}
+            {% if form.description.errors %}
+                <div class="text-danger">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.tech_stack.label_tag }} 
+            {{ form.tech_stack }}
+            {% if form.tech_stack.errors %}
+                <div class="text-danger">{{ form.tech_stack.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.semester.label_tag }} 
+            {{ form.semester }}
+            {% if form.semester.errors %}
+                <div class="text-danger">{{ form.semester.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.image1.label_tag }} 
+            {{ form.image1 }}
+            {% if form.image1.errors %}
+                <div class="text-danger">{{ form.image1.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.image2.label_tag }} 
+            {{ form.image2 }}
+            {% if form.image2.errors %}
+                <div class="text-danger">{{ form.image2.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.image3.label_tag }} 
+            {{ form.image3 }}
+            {% if form.image3.errors %}
+                <div class="text-danger">{{ form.image3.errors }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        <a href="{% url 'project_list' %}" class="btn btn-secondary">Batal</a>
+    </form>
+</div>
+{% endblock %}

@@ -27,5 +27,10 @@ urlpatterns = [
     path('education/add/', views.edu_create, name='edu_create'),
     path('education/edit/<int:pk>/', views.edu_edit, name='edu_edit'),
     path('education/delete/<int:pk>/', views.edu_delete, name='edu_delete'),
+
+    path('projects/', views.project_list, name='project_list'),
+    path('projects/add/', views.project_create, name='project_create'),
+    path('projects/edit/<int:pk>/', views.project_edit, name='project_edit'),
+    path('projects/delete/<int:pk>/', views.project_delete, name='project_delete'),
 ]
 

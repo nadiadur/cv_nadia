@@ -1,11 +1,11 @@
 import requests
 from django.shortcuts import render, get_object_or_404, redirect
-from cv_api.models import Project, Profile, Skill, OrganizationExperience, Education
+from cv_api.models import Project, Profile, Skill, OrganizationExperience, Education, Project
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import logout
-from cv_api.forms import ProfileForm, SkillForm, OrganizationExperienceForm, EducationForm
+from cv_api.forms import ProfileForm, SkillForm, OrganizationExperienceForm, EducationForm, ProjectForm
 
 
 
@@ -206,4 +206,40 @@ def edu_delete(request, pk):
         education.delete()
         return redirect('edu_list')
     return render(request, 'frontend/education/delete.html', {'education': education})
+
+@login_required(login_url="login")
+def project_list(request):
+    projects = Project.objects.all()
+    return render(request, 'frontend/projects/list.html', {'projects': projects})
+
+@login_required(login_url="login")
+def project_create(request):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('project_list')
+    else:
+        form = ProjectForm()
+    return render(request, 'frontend/projects/form.html', {'form': form})
+
+@login_required(login_url="login")
+def project_edit(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    if request.method == 'POST':
+        form = ProjectForm(request.POST, request.FILES, instance=project)
+        if form.is_valid():
+            form.save()
+            return redirect('project_list')
+    else:
+        form = ProjectForm(instance=project)
+    return render(request, 'frontend/projects/form.html', {'form': form})
+
+@login_required(login_url="login")
+def project_delete(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    if request.method == 'POST':
+        project.delete()
+        return redirect('project_list')
+    return render(request, 'frontend/projects/delete.html', {'project': project})
 

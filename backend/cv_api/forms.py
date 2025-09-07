@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Skill, OrganizationExperience, Education
+from .models import Profile, Skill, OrganizationExperience, Education, Project
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -47,4 +47,19 @@ class EducationForm(forms.ModelForm):
             'degree': forms.TextInput(attrs={'class': 'form-control'}),
             'institution': forms.TextInput(attrs={'class': 'form-control'}),
             'gpa': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ['profile', 'title', 'description', 'tech_stack', 'semester', 'image1', 'image2', 'image3']
+        widgets = {
+            'profile': forms.Select(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows':4}),
+            'tech_stack': forms.TextInput(attrs={'class': 'form-control'}),
+            'semester': forms.TextInput(attrs={'class': 'form-control'}),
+            'image1': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'image2': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'image3': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
