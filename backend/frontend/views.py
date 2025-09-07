@@ -1,11 +1,11 @@
 import requests
 from django.shortcuts import render, get_object_or_404, redirect
-from cv_api.models import Project, Profile, Skill, OrganizationExperience
+from cv_api.models import Project, Profile, Skill, OrganizationExperience, Education
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import logout
-from cv_api.forms import ProfileForm, SkillForm, OrganizationExperienceForm
+from cv_api.forms import ProfileForm, SkillForm, OrganizationExperienceForm, EducationForm
 
 
 
@@ -170,4 +170,40 @@ def org_delete(request, pk):
         org.delete()
         return redirect('org_list')
     return render(request, 'frontend/orgs/delete.html', {'org': org})
+
+@login_required(login_url="login")
+def edu_list(request):
+    educations = Education.objects.all()
+    return render(request, 'frontend/education/list.html', {'educations': educations})
+
+@login_required(login_url="login")
+def edu_create(request):
+    if request.method == 'POST':
+        form = EducationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('edu_list')
+    else:
+        form = EducationForm()
+    return render(request, 'frontend/education/form.html', {'form': form})
+
+@login_required(login_url="login")
+def edu_edit(request, pk):
+    education = get_object_or_404(Education, pk=pk)
+    if request.method == 'POST':
+        form = EducationForm(request.POST, instance=education)
+        if form.is_valid():
+            form.save()
+            return redirect('edu_list')
+    else:
+        form = EducationForm(instance=education)
+    return render(request, 'frontend/education/form.html', {'form': form})
+
+@login_required(login_url="login")
+def edu_delete(request, pk):
+    education = get_object_or_404(Education, pk=pk)
+    if request.method == 'POST':
+        education.delete()
+        return redirect('edu_list')
+    return render(request, 'frontend/education/delete.html', {'education': education})
 

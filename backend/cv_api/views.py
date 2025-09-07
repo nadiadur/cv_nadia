@@ -77,3 +77,4 @@ def skill_delete(request, pk):
         skill.delete()
         return redirect('skill_list')
     return render(request, 'frontend/skills/delete.html', {'skill': skill})
+
