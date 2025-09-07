@@ -1,12 +1,110 @@
 {% extends "frontend/base.html" %}
+
+{% block title %}Form Profile{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
-    <h2>Form Profile</h2>
-    <form method="post">
+    <h2 class="mb-4">Form Profile</h2>
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{% url 'profile_list' %}" class="btn btn-secondary">Kembali</a>
+
+        <!-- Name -->
+        <div class="card mb-3">
+            <div class="card-header">Name</div>
+            <div class="card-body">
+                {{ form.name }}
+                {% for error in form.name.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Address -->
+        <div class="card mb-3">
+            <div class="card-header">Address</div>
+            <div class="card-body">
+                {{ form.address }}
+                {% for error in form.address.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="card mb-3">
+            <div class="card-header">Phone</div>
+            <div class="card-body">
+                {{ form.phone }}
+                {% for error in form.phone.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="card mb-3">
+            <div class="card-header">Email</div>
+            <div class="card-body">
+                {{ form.email }}
+                {% for error in form.email.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Github -->
+        <div class="card mb-3">
+            <div class="card-header">Github</div>
+            <div class="card-body">
+                {{ form.github }}
+                {% for error in form.github.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="card mb-3">
+            <div class="card-header">Summary</div>
+            <div class="card-body">
+                {{ form.summary }}
+                {% for error in form.summary.errors %}
+                    <div class="text-danger small">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card mb-3">
+    <div class="card-header">Gambar</div>
+    <div class="card-body">
+        {{ form.image }}
+        {% for error in form.image.errors %}
+            <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+    </div>
+</div>
+
+
+        <!-- Tombol -->
+        <div class="d-flex gap-2 mt-3">
+            <a href="{% url 'profile_list' %}" class="btn btn-secondary">Kembali</a>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
     </form>
 </div>
+
+<style>
+.card input, .card textarea, .card select {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.card input:focus, .card textarea:focus, .card select:focus {
+    border-color: #495057;
+    outline: none;
+    box-shadow: none;
+}
+</style>
 {% endblock %}
+

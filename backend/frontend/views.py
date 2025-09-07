@@ -8,13 +8,13 @@ from django.contrib.auth import logout
 from cv_api.forms import ProfileForm
 
 
-
 def home(request):
     return render(request, 'home.html')
 
 def project_detail(request, id): 
     project = get_object_or_404(Project, id=id)
     return render(request, 'single-portfolio.html', {'project': project})
+
 @never_cache
 def login_view(request):
     if request.user.is_authenticated:
@@ -30,7 +30,6 @@ def login_view(request):
             return render(request, "frontend/login.html", {"error": "Username atau password salah"})
     return render(request, "frontend/login.html")
 
-
 @never_cache
 @login_required(login_url="login")
 def dashboard(request):
@@ -43,9 +42,7 @@ def dashboard(request):
             profiles = []
     except:
         profiles = []
-
     return render(request, "frontend/dashboard.html", {"profiles": profiles})
-
 
 @never_cache
 @login_required(login_url="login")
@@ -53,81 +50,58 @@ def logout_view(request):
     logout(request)
     return redirect("login")
 
-
-
-def profile_list(request):
-    profiles = Profile.objects.all()  
-    return render(request, 'frontend/pages-profile.html', {'profiles': profiles})
-
-
-
-
-
+# ================= PROFILE CRUD =================
 
 @login_required(login_url="login")
 def profile_list(request):
     profiles = Profile.objects.all()
     return render(request, "frontend/profiles/list.html", {"profiles": profiles})
 
-
 @login_required(login_url="login")
-def profile_create(request):
+def profile_add(request):  # Sesuai dengan URL pattern 'profile-add'
     if request.method == "POST":
-        Profile.objects.create(
-            name=request.POST.get("name"),
-            address=request.POST.get("address"),
-            phone=request.POST.get("phone"),
-            email=request.POST.get("email"),
-            github=request.POST.get("github"),
-            summary=request.POST.get("summary"),
-            image=request.FILES.get("image"), 
-        )
-        return redirect("profile_list")
-    return render(request, "frontend/profiles/form.html")
-
-
-@login_required(login_url="login")
-def profile_update(request, id):
-    profile = get_object_or_404(Profile, id=id)
-    if request.method == "POST":
-        profile.name = request.POST.get("name")
-        profile.address = request.POST.get("address")
-        profile.phone = request.POST.get("phone")
-        profile.email = request.POST.get("email")
-        profile.github = request.POST.get("github")
-        profile.summary = request.POST.get("summary")
-        if request.FILES.get("image"):
-            profile.image = request.FILES.get("image")
-        profile.save()
-        return redirect("profile_list")
-    return render(request, "frontend/profiles/form.html", {"profile": profile})
-
-
-@login_required(login_url="login")
-def profile_delete(request, id):
-    profile = get_object_or_404(Profile, id=id)
-    if request.method == "POST":
-        profile.delete()
-        return redirect("profile_list")
-    return render(request, "frontend/profiles/delete.html", {"profile": profile})
-
-def profile_add(request):
-    if request.method == "POST":
+        print("=== DEBUG ADD PROFILE ===")
+        print("POST data:", request.POST)
+        print("FILES data:", request.FILES)
+        print("Has image:", 'image' in request.FILES)
+        
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            profile = form.save()
+            print(f"Profile saved: {profile.name}")
+            print(f"Image saved: {profile.image}")
             return redirect('profile-list')
+        else:
+            print("Form errors:", form.errors)
     else:
         form = ProfileForm()
-    return render(request, 'frontend/profile_add.html', {'form': form})
+    return render(request, 'frontend/profiles/form.html', {'form': form})
 
-def profile_edit(request, pk):
+@login_required(login_url="login")
+def profile_edit(request, pk):  # Sesuai dengan URL pattern 'profile-edit'
     profile = get_object_or_404(Profile, pk=pk)
     if request.method == "POST":
+        print("=== DEBUG EDIT PROFILE ===")
+        print("POST data:", request.POST)
+        print("FILES data:", request.FILES)
+        print("Current image:", profile.image)
+        
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            form.save()
+            updated_profile = form.save()
+            print(f"Profile updated: {updated_profile.name}")
+            print(f"New image: {updated_profile.image}")
             return redirect('profile-list')
+        else:
+            print("Form errors:", form.errors)
     else:
         form = ProfileForm(instance=profile)
-    return render(request, 'frontend/profile_edit.html', {'form': form, 'profile': profile})
+    return render(request, 'frontend/profiles/form.html', {'form': form, 'profile': profile})
+
+@login_required(login_url="login")
+def profile_delete(request, pk): 
+    profile = get_object_or_404(Profile, pk=pk)
+    if request.method == "POST":
+        profile.delete()
+        return redirect('profile-list')
+    return render(request, "frontend/profiles/delete.html", {"profile": profile})

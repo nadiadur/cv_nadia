@@ -9,7 +9,8 @@ class Profile(models.Model):
     email = models.EmailField()
     github = models.CharField(max_length=100, blank=True, null=True)
     summary = models.TextField()
-    image = models.ImageField(upload_to='profile_images/', blank=True, null=True)  
+    image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
+      
 
     def __str__(self):
         return self.name
