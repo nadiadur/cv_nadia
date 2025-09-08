@@ -3,7 +3,7 @@
 <html>
 
 <head>
-	<title>Aurora - Portfolio Bootstrap5 HTML/CSS Website Template</title>
+	<title>portfolio</title>
 
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -53,6 +53,9 @@
 				<label class="menu-btn" for="menu-toggle">
 					<span></span>
 				</label>
+				 <h1>{{ profile.name }}</h1>
+					<p>{{ profile.address }}</p>
+					<img src="{{ profile.image.url }}" alt="{{ profile.name }}">
 			</nav>
 
 		</div><!--header-wrap-->
