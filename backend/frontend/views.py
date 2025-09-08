@@ -259,4 +259,4 @@ def dashboard(request):
 
 def homepage(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
-    return render(request, 'homepage.html', {'profile': profile})
+    return render(request, 'home.html', {'profile': profile})
