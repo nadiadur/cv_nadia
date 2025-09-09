@@ -3,7 +3,10 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Daftar Skill</h2>
-    <a href="{% url 'skill_create' %}" class="btn btn-success mb-3">+ Tambah Skill</a>
+
+    {% if request.user.is_staff %}
+        <a href="{% url 'skill_create' %}" class="btn btn-success mb-3">+ Tambah Skill</a>
+    {% endif %}
 
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
@@ -11,7 +14,9 @@
                 <th>Nama Skill</th>
                 <th>Kategori</th>
                 <th>Profile</th>
-                <th>Aksi</th>
+                {% if request.user.is_staff %}
+                    <th>Aksi</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -20,14 +25,16 @@
                 <td>{{ skill.name }}</td>
                 <td>{{ skill.category }}</td>
                 <td>{{ skill.profile.name }}</td>
+                {% if request.user.is_staff %}
                 <td>
                     <a href="{% url 'skill_edit' skill.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="{% url 'skill_delete' skill.pk %}" class="btn btn-danger btn-sm">Hapus</a>
+                    <a href="{% url 'skill_delete' skill.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Apakah yakin ingin menghapus?')">Hapus</a>
                 </td>
+                {% endif %}
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4" class="text-center">Tidak ada skill</td>
+                <td colspan="{% if request.user.is_staff %}4{% else %}3{% endif %}" class="text-center">Tidak ada skill</td>
             </tr>
             {% endfor %}
         </tbody>

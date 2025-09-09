@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login
+from django.contrib.auth.views import LoginView
 from rest_framework import viewsets
 from .models import Profile, Skill
 from .forms import ProfileForm, SkillForm
@@ -7,6 +9,16 @@ from .serializers import ProfileSerializer
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+
+class CustomLoginView(LoginView):
+    template_name = "frontend/login.html"
+
+    def get_success_url(self):
+        user = self.request.user
+        if user.role == "admin":
+            return "/dashboard/" 
+        return "/user-dashboard/"
 
 
 def profile_list(request):

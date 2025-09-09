@@ -15,23 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
 from django.urls import path, include
 from rest_framework import routers
-from cv_api.views import ProfileViewSet
+from cv_api.views import ProfileViewSet, CustomLoginView
 from django.conf import settings
 from django.conf.urls.static import static
 from cv_api import views as cv_views 
 from frontend import views as frontend_views
+from frontend.views import user_dashboard, dashboard
 from django.conf.urls import handler404
 from django.shortcuts import render
-
 
 def custom_page_not_found_view(request, exception):
     return render(request, "frontend/notfound.html", status=404)
 
 handler404 = custom_page_not_found_view
-
 
 router = routers.DefaultRouter()
 router.register(r'profiles', ProfileViewSet)
@@ -40,7 +38,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('', include('frontend.urls')),
-    path('dashboard/', frontend_views.dashboard, name='dashboard'),
+
+    path('dashboard/', frontend_views.dashboard, name='dashboard'),   
+    path("user-dashboard/", user_dashboard, name="user_dashboard"),   
+
+    path("login/", CustomLoginView.as_view(), name="login"),
+
     path('dashboard/profiles/', cv_views.profile_list, name='profile_list'),
     path('dashboard/profiles/create/', cv_views.profile_create, name='profile_create'),
     path('dashboard/profiles/<int:pk>/edit/', cv_views.profile_edit, name='profile_edit'),

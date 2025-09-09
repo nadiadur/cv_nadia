@@ -2,7 +2,11 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Profiles</h2>
-   <a href="{% url 'profile_create' %}" class="btn btn-success">+ Tambah Profile</a>
+    
+    {% if request.user.is_staff %}
+        <a href="{% url 'profile_create' %}" class="btn btn-success mb-3">+ Tambah Profile</a>
+    {% endif %}
+
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -13,7 +17,9 @@
                 <th>Github</th>
                 <th>Summary</th>
                 <th>Gambar</th>
-                <th>Aksi</th>
+                {% if request.user.is_staff %}
+                    <th>Aksi</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -33,10 +39,12 @@
                     {% endif %}
                 </td>
                 
+                {% if request.user.is_staff %}
                 <td>
                     <a href="{% url 'profile_edit' p.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="{% url 'profile_delete' p.pk %}" class="btn btn-danger btn-sm">Hapus</a>
+                    <a href="{% url 'profile_delete' p.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Apakah yakin ingin menghapus?')">Hapus</a>
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

@@ -1,6 +1,6 @@
 import requests
 from django.shortcuts import render, get_object_or_404, redirect
-from cv_api.models import Project, Profile, Skill, OrganizationExperience, Education, Project
+from cv_api.models import Project, Profile, Skill, OrganizationExperience, Education
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
@@ -8,31 +8,70 @@ from django.contrib.auth import logout
 from cv_api.forms import ProfileForm, SkillForm, OrganizationExperienceForm, EducationForm, ProjectForm
 
 
+import requests
+from django.shortcuts import render, get_object_or_404, redirect
+from cv_api.models import Project, Profile, Skill, OrganizationExperience, Education
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
+from django.http import HttpResponseForbidden
+
+
+@login_required(login_url="login")
+def user_dashboard(request):
+    if request.user.is_staff:
+        return HttpResponseForbidden("Halaman ini hanya untuk user biasa.")
+    
+    context = {
+        'profiles': Profile.objects.all(),
+        'educations': Education.objects.all(),
+        'skills': Skill.objects.all(),
+        'projects': Project.objects.all(),
+        'organizations': OrganizationExperience.objects.all(),
+    }
+    return render(request, "frontend/user_dashboard.html", context)
+
+
 def home(request):
     return render(request, 'home.html')
+
 
 def project_detail(request, id): 
     project = get_object_or_404(Project, id=id)
     return render(request, 'single-portfolio.html', {'project': project})
 
+
 @never_cache
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect("dashboard") 
+        if request.user.is_staff:  # admin
+            return redirect("dashboard")
+        else:  # user biasa
+            return redirect("user_dashboard")
+
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("dashboard")
+            if user.is_staff:  # admin login
+                return redirect("dashboard")
+            else:  # user biasa login
+                return redirect("user_dashboard")
         else:
             return render(request, "frontend/login.html", {"error": "Username atau password salah"})
+    
     return render(request, "frontend/login.html")
+
+
 
 @never_cache
 @login_required(login_url="login")
 def dashboard(request):
+    if not request.user.is_staff:
+        return HttpResponseForbidden("Anda tidak punya akses ke halaman admin.")
+
     api_url = "http://127.0.0.1:8000/api/profiles/"
     try:
         response = requests.get(api_url)
@@ -44,11 +83,13 @@ def dashboard(request):
         profiles = []
     return render(request, "frontend/dashboard.html", {"profiles": profiles})
 
+
 @never_cache
 @login_required(login_url="login")
 def logout_view(request):
     logout(request)
     return redirect("login")
+
 
 # ================= PROFILE CRUD =================
 
