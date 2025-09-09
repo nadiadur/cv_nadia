@@ -245,20 +245,6 @@ def project_delete(request, pk):
         return redirect('project_list')
     return render(request, 'frontend/projects/delete.html', {'project': project})
 
-
-def dashboard(request):
-    context = {
-        'profile_count': Profile.objects.count(),
-        'education_count': Education.objects.count(),
-        'skill_count': Skill.objects.count(),
-        'project_count': Project.objects.count(),
-        'org_count': OrganizationExperience.objects.count(),
-    }
-    return render(request, 'frontend/dashboard.html', context)
-
-
-
-
 def homepage(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     return render(request, 'home.html', {'profile': profile})

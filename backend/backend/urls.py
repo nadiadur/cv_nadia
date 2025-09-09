@@ -22,6 +22,7 @@ from cv_api.views import ProfileViewSet
 from django.conf import settings
 from django.conf.urls.static import static
 from cv_api import views as cv_views 
+from frontend import views as frontend_views
 from django.conf.urls import handler404
 from django.shortcuts import render
 
@@ -39,6 +40,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('', include('frontend.urls')),
+    path('dashboard/', frontend_views.dashboard, name='dashboard'),
     path('dashboard/profiles/', cv_views.profile_list, name='profile_list'),
     path('dashboard/profiles/create/', cv_views.profile_create, name='profile_create'),
     path('dashboard/profiles/<int:pk>/edit/', cv_views.profile_edit, name='profile_edit'),
