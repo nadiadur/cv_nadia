@@ -22,6 +22,15 @@ from cv_api.views import ProfileViewSet
 from django.conf import settings
 from django.conf.urls.static import static
 from cv_api import views as cv_views 
+from django.conf.urls import handler404
+from django.shortcuts import render
+
+
+def custom_page_not_found_view(request, exception):
+    return render(request, "frontend/notfound.html", status=404)
+
+handler404 = custom_page_not_found_view
+
 
 router = routers.DefaultRouter()
 router.register(r'profiles', ProfileViewSet)

@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import logout
 from cv_api.forms import ProfileForm, SkillForm, OrganizationExperienceForm, EducationForm, ProjectForm
-from frontend.models import Profile
 
 
 def home(request):
@@ -59,7 +58,7 @@ def profile_list(request):
     return render(request, "frontend/profiles/list.html", {"profiles": profiles})
 
 @login_required(login_url="login")
-def profile_add(request):  # Sesuai dengan URL pattern 'profile-add'
+def profile_add(request): 
     if request.method == "POST":
         print("=== DEBUG ADD PROFILE ===")
         print("POST data:", request.POST)
@@ -79,7 +78,7 @@ def profile_add(request):  # Sesuai dengan URL pattern 'profile-add'
     return render(request, 'frontend/profiles/form.html', {'form': form})
 
 @login_required(login_url="login")
-def profile_edit(request, pk):  # Sesuai dengan URL pattern 'profile-edit'
+def profile_edit(request, pk): 
     profile = get_object_or_404(Profile, pk=pk)
     if request.method == "POST":
         print("=== DEBUG EDIT PROFILE ===")
@@ -107,10 +106,12 @@ def profile_delete(request, pk):
         return redirect('profile-list')
     return render(request, "frontend/profiles/delete.html", {"profile": profile})
 
+@login_required(login_url="login")
 def skill_list(request):
     skills = Skill.objects.all()
     return render(request, 'frontend/skills/list.html', {'skills': skills})
 
+@login_required(login_url="login")
 def skill_create(request):
     if request.method == 'POST':
         form = SkillForm(request.POST)
@@ -121,6 +122,7 @@ def skill_create(request):
         form = SkillForm()
     return render(request, 'frontend/skills/form.html', {'form': form})
 
+@login_required(login_url="login")
 def skill_edit(request, pk):
     skill = get_object_or_404(Skill, pk=pk)
     if request.method == 'POST':
@@ -132,13 +134,13 @@ def skill_edit(request, pk):
         form = SkillForm(instance=skill)
     return render(request, 'frontend/skills/form.html', {'form': form})
 
+@login_required(login_url="login")
 def skill_delete(request, pk):
     skill = get_object_or_404(Skill, pk=pk)
     if request.method == 'POST':
         skill.delete()
         return redirect('skill_list')
     return render(request, 'frontend/skills/delete.html', {'skill': skill})
-
 def org_list(request):
     orgs = OrganizationExperience.objects.all()
     return render(request, 'frontend/orgs/list.html', {'orgs': orgs})
