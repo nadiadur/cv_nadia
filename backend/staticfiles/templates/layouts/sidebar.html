@@ -1,0 +1,62 @@
+<div class="wrapper">
+		<nav id="sidebar" class="sidebar js-sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="{% url 'dashboard' %}">
+          <span class="align-middle">Dashboard </span>
+        </a>
+
+				<ul class="sidebar-nav">
+					<li class="sidebar-header">
+						Pages
+					</li>
+
+					<li class="sidebar-item active">
+						{% if request.user.is_staff %}
+							<a class="sidebar-link" href="{% url 'dashboard' %}">
+								<i class="align-middle" data-feather="sliders"></i> 
+								<span class="align-middle">Dashboard</span>
+							</a>
+						{% else %}
+							<a class="sidebar-link" href="{% url 'user_dashboard' %}">
+								<i class="align-middle" data-feather="sliders"></i> 
+								<span class="align-middle">Dashboard</span>
+							</a>
+						{% endif %}
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="{% url 'profile-list' %}">
+              <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+            </a>
+					</li>
+					<li class="sidebar-item">
+					<a class="sidebar-link" href="{% url 'skill_list' %}">
+						<i class="align-middle" data-feather="award"></i> 
+						<span class="align-middle">Skill</span>
+					</a>
+				</li>
+				<li class="sidebar-item">
+					<a class="sidebar-link" href="{% url 'org_list' %}">
+						<i class="align-middle" data-feather="briefcase"></i> 
+						<span class="align-middle">Organisasi</span>
+					</a>
+				</li>
+				<li class="sidebar-item">
+					<a class="sidebar-link" href="{% url 'edu_list' %}">
+						<i class="align-middle" data-feather="book"></i> 
+						<span class="align-middle">Education</span>
+					</a>
+				</li>
+				<li class="sidebar-item">
+					<a class="sidebar-link" href="{% url 'project_list' %}">
+						<i class="align-middle" data-feather="layers"></i> 
+						<span class="align-middle">Project</span>
+					</a>
+				</li>
+
+				</ul>
+
+				
+			</div>
+		</nav>
+
+		

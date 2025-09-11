@@ -6,14 +6,6 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.contrib.auth import logout
 from cv_api.forms import ProfileForm, SkillForm, OrganizationExperienceForm, EducationForm, ProjectForm
-
-
-import requests
-from django.shortcuts import render, get_object_or_404, redirect
-from cv_api.models import Project, Profile, Skill, OrganizationExperience, Education
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import never_cache
 from django.http import HttpResponseForbidden
 
 

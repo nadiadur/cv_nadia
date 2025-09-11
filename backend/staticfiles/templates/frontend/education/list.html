@@ -1,0 +1,45 @@
+{% extends "frontend/base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Education</h2>
+    
+    {% if request.user.is_staff %}
+        <a href="{% url 'edu_create' %}" class="btn btn-success mb-3">+ Tambah Education</a>
+    {% endif %}
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Profile</th>
+                <th>Start Year</th>
+                <th>End Year</th>
+                <th>Degree</th>
+                <th>Institution</th>
+                <th>GPA</th>
+                {% if request.user.is_staff %}
+                    <th>Aksi</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in educations %}
+            <tr>
+                <td>{{ e.profile.name }}</td>
+                <td>{{ e.start_year }}</td>
+                <td>{{ e.end_year }}</td>
+                <td>{{ e.degree }}</td>
+                <td>{{ e.institution }}</td>
+                <td>{{ e.gpa }}</td>
+                {% if request.user.is_staff %}
+                <td>
+                    <a href="{% url 'edu_edit' e.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'edu_delete' e.pk %}" class="btn btn-danger btn-sm" 
+                       onclick="return confirm('Apakah yakin ingin menghapus?')">Hapus</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
